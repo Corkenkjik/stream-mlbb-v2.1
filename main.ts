@@ -8,7 +8,7 @@ function arrayToXml(data: { id: number; items: number[] }[]) {
     for (let itemNum = 1; itemNum <= ITEMS_PER_PLAYER; itemNum++) {
       const arrayIndex = itemNum - 1
       const value = arrayIndex < player.items.length
-        ? `http://localhost:8000/image/items/${player.items[arrayIndex]}`
+        ? `http://localhost:8002/image/item/${player.items[arrayIndex]}`
         : ""
 
       xml +=
@@ -21,11 +21,12 @@ function arrayToXml(data: { id: number; items: number[] }[]) {
 }
 
 const data = [
-  { id: 1, items: [10, 20, 30, 5, 6, 7] },
-  { id: 2, items: [10, 20, 30] },
-  { id: 3, items: [10, 20, 30, 4] },
-  { id: 4, items: [10, 20] },
-  { id: 5, items: [10, 20, 30] },
+  { id: 1, items: [1001, 1002, 1003, 1005, 1007, 1008] },
+  { id: 1, items: [1001, 1002, 1003] },
+  { id: 1, items: [1001, 1002] },
+  { id: 1, items: [] },
+  { id: 1, items: [1001, 1002, 1003, 1005, 1007] },
+  { id: 1, items: [1001, 1002, 1003, 1005] },
 ]
 
 console.log(arrayToXml(data))

@@ -1,6 +1,8 @@
 import { create, updatePlayerPick } from "#players/repository.ts"
 import db from "#db"
 import { Player as SourcePlayer } from "../../lib/game/game-source/types.ts"
+import { getPlayerIds } from "#teams/repository.ts"
+import * as repository from "./repository.ts"
 
 export const addPlayers = (players: SourcePlayer[]) => {
   const results = players.map((player) => {
@@ -38,4 +40,24 @@ export const updatePlayerPickState = (data: Map<string, number | null>) => {
   for (const [key, value] of data) {
     updatePlayerPick(key, value)
   }
+}
+
+export const getPlayersItems = (side: "blue" | "red") => {
+  const playerIds = getPlayerIds(side)
+  if (!playerIds) {
+    return
+  }
+
+  const data = repository.getPlayerItems(playerIds)
+  return data
+}
+
+export const getPlayersPick = (side: "blue" | "red") => {
+  const playerIds = getPlayerIds(side)
+  if (!playerIds) {
+    return
+  }
+
+  const data = repository._getPlayerPicks(playerIds)
+  return data
 }

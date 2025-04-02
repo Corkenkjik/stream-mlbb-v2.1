@@ -120,4 +120,6 @@ dataRouter.get("/mvp-rune/xml", (ctx) => {
     `<rune-mvp>${`http://localhost:8002/image/rune/${rune}`}</rune-mvp>`
 })
 
+
+
 export default dataRouter

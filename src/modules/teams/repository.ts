@@ -80,3 +80,29 @@ export async function getPlayerBans(side: "blue" | "red") {
   const payload = await JSON.parse(result?.bans) as number[]
   return payload
 }
+
+/**
+ * Return array of ids of the players
+ */
+export function getPlayerIds(side: "blue" | "red") {
+  const queryResult = db.prepare(
+    `SELECT player1, player2, player3, player4, player5 FROM teams WHERE side = ?`,
+  ).get(side === "blue" ? 1 : 2) as {
+    player1: number
+    player2: number
+    player3: number
+    player4: number
+    player5: number
+  } | undefined
+
+  if (!queryResult) {
+    return
+  }
+
+  const ids = Object.values(queryResult).map((v) => {
+    if (v === 0) return
+    return v
+  }).filter((v) => v !== undefined)
+
+  return ids
+}

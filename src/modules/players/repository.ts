@@ -100,7 +100,7 @@ export function getPlayerPicks(side: "blue" | "red") {
   const results = ids.map((id) => {
     const result = db.prepare(`SELECT pick FROM players WHERE id = ?`).get(
       id,
-    ) as { pick: number | null}
+    ) as { pick: number | null }
     return result.pick
   }).filter((x) => x !== null)
 
@@ -138,4 +138,41 @@ export function getRunes(side: "blue" | "red") {
   }).filter((x) => x !== null)
 
   return results
+}
+
+export function getPlayerItems(ids: number[]) {
+  const placeholders = ids.map(() => "?").join(",")
+  const query = db.prepare(`SELECT id, items WHERE id IN (${placeholders})`)
+
+  const rows = query.all(...ids) as {
+    id: number
+    items: string
+  }[] | undefined
+
+  if (!rows) {
+    return
+  }
+
+  return rows?.map((row) => (
+    { id: row.id, items: JSON.parse(row.items) as number[] }
+  ))
+}
+
+export function _getPlayerPicks(ids: number[]) {
+  const placeholders = ids.map(() => "?").join(",")
+  const query = db.prepare(
+    `SELECT id, pick WHERE id IN (${placeholders}) ORDER BY id`,
+  )
+  const rows = query.all(...ids) as {
+    id: number
+    pick: string
+  }[] | undefined
+
+  if (!rows) {
+    return
+  }
+
+  return rows?.map((row) => (
+    { id: row.id, pick: row.pick }
+  ))
 }

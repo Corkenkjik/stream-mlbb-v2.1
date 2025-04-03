@@ -11,6 +11,7 @@
     "#game/": "./src/modules/game/",
     "#players/": "./src/modules/players/",
     "#teams/": "./src/modules/teams/",
+    "#helper/": "./src/lib/helper/",
     "#db": "./src/db/index.ts"
   },
   "lint": {

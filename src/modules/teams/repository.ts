@@ -70,17 +70,6 @@ export function updateTeamBuffs(
   ).run(red[0], red[1])
 }
 
-export async function getPlayerBans(side: "blue" | "red") {
-  const result = db.prepare(`SELECT bans FROM teams WHERE side = ?`).get(
-    side === "blue" ? 1 : 2,
-  ) as { bans: string } | undefined
-
-  if (!result?.bans) return [] as number[]
-
-  const payload = await JSON.parse(result?.bans) as number[]
-  return payload
-}
-
 /**
  * Return array of ids of the players
  */
@@ -105,4 +94,35 @@ export function getPlayerIds(side: "blue" | "red") {
   }).filter((v) => v !== undefined)
 
   return ids
+}
+
+export function getPlayerBans(side: "blue" | "red") {
+  const result = db.prepare(`SELECT bans FROM teams WHERE side = ?`).get(
+    side === "blue" ? 1 : 2,
+  ) as { bans: string } | undefined
+
+  if (!result?.bans) return [] as number[]
+
+  const payload = JSON.parse(result?.bans) as number[]
+  return payload
+}
+
+export function getTeamData(side: "blue" | "red") {
+  const result = db.prepare(
+    `SELECT tower, score, tortoise, lord, gold, blueBuff, redBuff FROM teams WHERE side = ?`,
+  ).get(
+    side === "blue" ? 1 : 2,
+  ) as {
+    tower: number
+    score: number
+    tortoise: number
+    lord: number
+    gold: number
+    blueBuff: number
+    redBuff: number
+  } | undefined
+
+  if (!result) return
+
+  return result
 }

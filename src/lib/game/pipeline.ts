@@ -52,7 +52,6 @@ export const battlePipeline = (data: BattleData) => {
     // state_left
     const timeLeft = data.state_left_time || null
 
-    // thằng nào đang pick ???
     const isBluePick = blueTeam.player_list.some((player) => player.picking)
     const isRedPick = redTeam.player_list.some((player) => player.picking)
 
@@ -65,7 +64,6 @@ export const battlePipeline = (data: BattleData) => {
     }
     return "pick"
   } else if (data.state === "adjust") {
-    // state_left = static 30 giây
     updateTimeLeft(data.state_left_time)
 
     const pickMap = new Map<string, number>()
@@ -79,10 +77,8 @@ export const battlePipeline = (data: BattleData) => {
     updatePlayerPickState(pickMap)
     return "adjust"
   } else if (data.state === "play") {
-    // game time
     updateGameTime(data.game_time)
 
-    // realtime data: gold, tower, score, tortoise, lord
     updateTeamRealtimeData({
       gold: blueTeam.total_money,
       tower: blueTeam.kill_tower,
@@ -133,6 +129,7 @@ export const postBattlePipeline = (data: PostBattleData) => {
   // Players
   const players = new Map<string, Player>()
   data.hero_list.forEach((hero) => {
+    console.log(hero.rune_map)
     players.set(hero.name, {
       name: hero.name,
       pick: hero.heroid,
@@ -142,10 +139,10 @@ export const postBattlePipeline = (data: PostBattleData) => {
       gold: hero.total_money,
       level: hero.level,
       skillid: hero.skillid,
-      rune: hero.runeid,
-      rune1: hero.runeid,
-      rune2: hero.runeid,
-      rune3: hero.runeid,
+      rune: hero.runeid || null,
+      rune1: hero.rune_map ? hero.rune_map["1"] : null,
+      rune2: hero.rune_map ? hero.rune_map["2"] : null,
+      rune3: hero.rune_map ? hero.rune_map["3"] : null,
       dmgDealt: hero.total_damage,
       dmgTaken: hero.total_hurt,
       items: hero.equip_list,

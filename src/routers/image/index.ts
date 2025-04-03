@@ -99,5 +99,15 @@ imageRouter.get("/player/:id", async (ctx) => {
     await send(ctx, fallbackImage)
   }
 })
+imageRouter.get("/teamicon/:side", async (ctx) => {
+  const imgPath = `static/teamicon/${ctx.params.side}.png` 
+  const isImgExisted = await fileExists(imgPath)
+  if (isImgExisted) {
+    await send(ctx, imgPath)
+  } else {
+    logger.log("hinh team icon missing: " + ctx.params.side, "ERROR")
+    await send(ctx, fallbackImage)
+  }
+})
 
 export default imageRouter

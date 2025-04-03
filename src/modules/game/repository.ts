@@ -58,10 +58,46 @@ export function getGameTime() {
   return result?.gametime || ""
 }
 
-export function getMvpRune() {
-  const result = db.prepare(
-    `SELECT players.rune as rune FROM game JOIN players ON game.mvp = players.name`,
-  ).get() as { rune: number | null } | undefined
+// export function getMvpRune() {
+//   const result = db.prepare(
+//     `SELECT players.rune as rune FROM game JOIN players ON game.mvp = players.name`,
+//   ).get() as { rune: number | null } | undefined
 
-  return result?.rune
+//   return result?.rune
+// }
+
+export function getMvpData() {
+  const result = db.prepare(
+    `SELECT players.rune as rune, 
+    players.name as name, 
+    players.kill as kill, 
+    players.death as death, 
+    players.assist as assist, 
+    players.gold as gold, 
+    players.items as items, 
+    players.skillid as skillid,
+    players.rune3 as rune,
+    players.dmgDealt as dmgDealt,
+    players.pick as pick,
+    players.dmgTaken as dmgTaken
+    FROM game 
+    JOIN players 
+    ON game.mvp = players.name`,
+  ).get() as {
+    name: string
+    rune: number
+    kill: number
+    death: number
+    assist: number
+    gold: number
+    items: string
+    skillid: number
+    dmgDealt: number
+    dmgTaken: number
+    pick: number
+  } | undefined
+
+  if (!result) return
+
+  return { ...result, items: JSON.parse(result.items) as number[] }
 }

@@ -104,6 +104,9 @@
     "https://deno.land/x/sqlite/mod.ts": "https://deno.land/x/sqlite@v3.9.1/mod.ts"
   },
   "remote": {
+    "https://cdn.sheetjs.com/xlsx-0.19.3/package/xlsx.mjs": "bd46bbded8bebaf8ba95a8cc8c44db359c8b02307a6e82407a1b4a0e73546c87",
+    "https://cdn.skypack.dev/-/exceljs@v4.4.0-FY0eKY9qnnqM2ISzdi5s/dist=es2019,mode=imports/optimized/exceljs.js": "883bff3cdb4e9ff90a4c873e474667d3c0d36d7ae1aa3efb276ab89e6ecb042f",
+    "https://cdn.skypack.dev/exceljs": "bb0def6e609ad5793f7e47d02a0c36658eeeac7216e1788126d8649dd288e5b2",
     "https://deno.land/x/sqlite@v3.9.1/build/sqlite.js": "2afc7875c7b9c85d89730c4a311ab3a304e5d1bf761fbadd8c07bbdf130f5f9b",
     "https://deno.land/x/sqlite@v3.9.1/build/vfs.js": "7f7778a9fe499cd10738d6e43867340b50b67d3e39142b0065acd51a84cd2e03",
     "https://deno.land/x/sqlite@v3.9.1/mod.ts": "e09fc79d8065fe222578114b109b1fd60077bff1bb75448532077f784f4d6a83",

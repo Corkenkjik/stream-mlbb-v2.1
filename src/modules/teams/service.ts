@@ -1,6 +1,7 @@
 import { create } from "#teams/repository.ts"
 import db from "#db"
 import { Player } from "#players/repository.ts"
+import * as repository from "./repository.ts"
 
 export function addTeams(
   data: { name: string; playerPos: number[]; side: "blue" | "red" },
@@ -62,4 +63,35 @@ export const updateTeamBanState = (
 ) => {
   db.prepare("UPDATE teams SET bans = ? WHERE side = ?")
     .run(JSON.stringify(data.banList), data.side === "blue" ? 1 : 2)
+}
+
+export function getTeamData(side: "blue" | "red") {
+  const data = repository.getTeamData(side)
+
+  if (!data) return
+
+  return `
+<${side}postdata>
+  <tower>${data.tower}</tower>
+<score>${data.score}</score>
+<tortoise>${data.tortoise}</tortoise>
+<lord>${data.lord}</lord>
+<gold>${data.gold}</gold>
+<blueBuff>${data.blueBuff}</blueBuff>
+<redBuff>${data.redBuff}</redBuff>
+</${side}postdata>`
+}
+
+export function getBans(side: "blue" | "red") {
+  const bans = repository.getPlayerBans(side)
+
+  const xmlResponse = Array(5).fill(0).map((_, index) => {
+    const len = bans?.length || 0
+    const url = index < len
+      ? `http://localhost:8000/image/champ-ban/${bans[index]}`
+      : ""
+    return `<${side}-ban-${index + 1}>${url}</${side}-ban-${index + 1}>`
+  }).join("\n")
+
+  return `<${side}bans>${xmlResponse}</${side}bans>`
 }

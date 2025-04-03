@@ -24,7 +24,7 @@ export class GameController {
         const postdata = await fetchPostBattleData(matchId)
         postBattlePipeline(postdata)
       }
-    }, 250)
+    }, 500)
   }
 
   static stopGame() {

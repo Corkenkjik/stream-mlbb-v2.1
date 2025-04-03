@@ -78,39 +78,6 @@ export function updatePlayerPostgame(data: Map<string, Player>) {
   }
 }
 
-export function getPlayerPicks(side: "blue" | "red") {
-  const idQueryResult = db.prepare(
-    `SELECT player1, player2, player3, player4, player5 FROM teams WHERE side = ?`,
-  ).get(
-    side === "blue" ? 1 : 2,
-  ) as {
-    player1: number
-    player2: number
-    player3: number
-    player4: number
-    player5: number
-  } | undefined
-  if (!idQueryResult) return
-
-  const ids = Object.values(idQueryResult).map((v) => {
-    if (v === 0) return
-    return v
-  }).filter((v) => v !== undefined)
-
-  const results = ids.map((id) => {
-    const result = db.prepare(`SELECT pick FROM players WHERE id = ?`).get(
-      id,
-    ) as { pick: number | null }
-    return result.pick
-  }).filter((x) => x !== null)
-
-  return results
-
-  // if (!result) return []
-
-  // const payload = result as number[]
-}
-
 export function getRunes(side: "blue" | "red") {
   const idQueryResult = db.prepare(
     `SELECT player1, player2, player3, player4, player5 FROM teams WHERE side = ?`,
@@ -142,7 +109,9 @@ export function getRunes(side: "blue" | "red") {
 
 export function getPlayerItems(ids: number[]) {
   const placeholders = ids.map(() => "?").join(",")
-  const query = db.prepare(`SELECT id, items WHERE id IN (${placeholders})`)
+  const query = db.prepare(
+    `SELECT id, items FROM players WHERE id IN (${placeholders})`,
+  )
 
   const rows = query.all(...ids) as {
     id: number
@@ -158,14 +127,14 @@ export function getPlayerItems(ids: number[]) {
   ))
 }
 
-export function _getPlayerPicks(ids: number[]) {
+export function getPlayerPicks(ids: number[]) {
   const placeholders = ids.map(() => "?").join(",")
   const query = db.prepare(
-    `SELECT id, pick WHERE id IN (${placeholders}) ORDER BY id`,
+    `SELECT id, pick FROM players WHERE id IN (${placeholders}) ORDER BY id`,
   )
   const rows = query.all(...ids) as {
     id: number
-    pick: string
+    pick: number
   }[] | undefined
 
   if (!rows) {
@@ -175,4 +144,40 @@ export function _getPlayerPicks(ids: number[]) {
   return rows?.map((row) => (
     { id: row.id, pick: row.pick }
   ))
+}
+
+export function getPlayerRunes(ids: number[]) {
+  const placeholders = ids.map(() => "?").join(",")
+  const query = db.prepare(
+    `SELECT id, rune3 as rune FROM players WHERE id IN (${placeholders}) ORDER BY id`,
+  )
+  const rows = query.all(...ids) as {
+    id: number
+    rune: string
+  }[] | undefined
+
+  if (!rows) {
+    return
+  }
+
+  return rows?.map((row) => (
+    { id: row.id, rune: row.rune }
+  ))
+}
+
+export function getPlayerDetails(ids: number[]) {
+  const placeholders = ids.map(() => "?").join(",")
+  const query = db.prepare(
+    `SELECT id, level, kill, death, assist, gold FROM players WHERE id IN (${placeholders}) ORDER BY id`,
+  )
+  const rows = query.all(...ids) as {
+    id: number
+    level: number
+    kill: number
+    death: number
+    assist: number
+    gold: number
+  }[] | undefined
+
+  return rows
 }

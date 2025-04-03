@@ -8,7 +8,7 @@ interface Team {
   players: string[]
 }
 
-async function extractTeamsFromExcel(filePath: string): Promise<Team[]> {
+export async function extractTeamsFromExcel(filePath: string): Promise<Team[]> {
   // Read the Excel file
   const file = await Deno.readFile(filePath)
   const workbook = read(file)
@@ -51,9 +51,9 @@ async function extractTeamsFromExcel(filePath: string): Promise<Team[]> {
 }
 
 // Example usage
-try {
+/* try {
   const teams = await extractTeamsFromExcel("data.xlsx")
   console.log(teams)
 } catch (error) {
   console.error("Error processing Excel file:", error)
-}
+} */
